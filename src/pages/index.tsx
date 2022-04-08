@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next';
 import Prismic from '@prismicio/client';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useState } from 'react';
 import { getPrismicClient } from '../services/prismic';
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
@@ -39,6 +40,31 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
       ),
     };
   });
+
+  const [posts, setPosts] = useState(postsFormated);
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
+
+  const handleNextPage = async (): Promise<void> => {
+    const postsResults = await fetch(`${nextPage}`).then(response =>
+      response.json()
+    );
+    setNextPage(postsResults.next_page);
+    setPosts([
+      ...posts,
+      ...postsResults.results.map(post => {
+        return {
+          ...post,
+          first_publication_date: format(
+            new Date(post.first_publication_date),
+            'dd MMM yyyy',
+            {
+              locale: ptBR,
+            }
+          ),
+        };
+      }),
+    ]);
+  };
 
   return (
     <>
