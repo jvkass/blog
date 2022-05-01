@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
-
 import Prismic from '@prismicio/client';
+import Head from 'next/head';
+import { FaRegCalendarAlt, FaUserAlt } from 'react-icons/fa';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { useState } from 'react';
 import { getPrismicClient } from '../services/prismic';
+
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
@@ -68,7 +71,45 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
 
   return (
     <>
-      <h1>test</h1>
+      <Head>
+        <title>Desafio | Charter III</title>
+      </Head>
+      <main className={commonStyles.contentContainer}>
+        <ul>
+          {posts.map(post => (
+            <li key={post.uid}>
+              <Link href={`/post/${post.uid}`}>
+                <a>
+                  <section className={commonStyles.postContainer}>
+                    <h1>{post.data.title}</h1>
+                    <p>{post.data.subtitle}</p>
+                    <section>
+                      <div>
+                        <FaRegCalendarAlt />
+                        <time>{post.first_publication_date}</time>
+                      </div>
+
+                      <div>
+                        <FaUserAlt /> {post.data.author}
+                      </div>
+                    </section>
+                  </section>
+                </a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {nextPage && (
+          <button
+            className={styles.button}
+            type="button"
+            onClick={handleNextPage}
+          >
+            Carregar mais posts
+          </button>
+        )}
+      </main>
     </>
   );
 }
@@ -77,7 +118,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
   const postsResponse = await prismic.query(
-    [Prismic.Predicates.at('document.type', 'posts')],
+    [Prismic.Predicates.at('document.type', 'post')],
     {
       pageSize: 1,
     }
@@ -104,6 +145,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       postsPagination,
     },
-    redirect: 1800, // 30 min
+    revalidate: 1800,
   };
 };
