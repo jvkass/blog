@@ -10,9 +10,11 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
+    "@giscus/react": "^2.0.3",
     "@prismicio/client": "4.0.0",
     "date-fns": "^2.19.0",
     "next": "12.1.4",
+    "object-hash": "^3.0.0",
     "prismic-dom": "^2.2.5",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -23,6 +25,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@types/node": "^14.14.31",
+    "@types/object-hash": "^2.2.1",
     "@types/prismic-dom": "^2.1.1",
     "@types/react": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.16.1",

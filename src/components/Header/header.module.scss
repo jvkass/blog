@@ -1,4 +1,7 @@
-.headerContainer {
+.postHeader {
+  height: 6rem;
   max-width: 700px;
-  margin: 3rem auto;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
 }
